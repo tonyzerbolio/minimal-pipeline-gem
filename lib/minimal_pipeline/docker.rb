@@ -51,14 +51,6 @@ class MinimalPipeline
       $stdout.puts build_output
     end
 
-    # Cleans up docker images
-    #
-    # @param image_id [String] The Docker container ID to delete
-    def clean_up_image(image_id)
-      image = ::Docker::Image.get(image_id)
-      image.remove(force: true)
-    end
-
     # Builds a docker image from a Dockerfile
     #
     # @param image_id [String] The name of the docker image
@@ -99,7 +91,6 @@ class MinimalPipeline
       stdout, stderr, status = Open3.capture3(docker_bin, 'push', image_id)
       raise "stdout: #{stdout}\nstderr: #{stderr}\nstatus: #{status}" \
         unless status.exitstatus.zero?
-      clean_up_image(image_id)
     end
   end
 end
